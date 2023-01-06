@@ -9,7 +9,7 @@
     <title>KV</title>
     <style>
         .sidebar-container {
-            width: 22%;
+            width: 25%;
             float: left;
             height: 100%;
             position: fixed;
@@ -28,7 +28,7 @@
             border: 3px solid rgb(85, 85, 197);
         }
         .context-container {
-            margin-left: 22%;
+            margin-left: 25%;
             height: 100%;
 
         }
@@ -41,15 +41,11 @@
 </head>
 <body>
     <div class="sidebar-container">
-        <img class="inside-img" src="./1.png"/>
-        <img class="inside-img" src="./2.png"/>
-        <img class="inside-img" src="./3.png"/>
-        <img class="inside-img" src="./4.png"/>
-        <img class="inside-img" src="./5.png"/>
-        <img class="inside-img" src="./6.png"/>
     </div>
     <div class="context-container">
-        <button class="btn btn-primary">Download</button>
+        <form method="post" action="./download.php">
+            <button class="btn btn-primary" type="submit">Download</button>
+        </form>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" ></script>
@@ -61,6 +57,21 @@
         } else {
             $(elem).addClass('selected-img');
         } 
+    })
+
+    $(document).ready(() => {
+        console.log('ok')
+        $.ajax({
+            url: "http://localhost/digitalkeval/listimage.php",
+            dataType: 'json',   
+            success: (data) => {
+                let imghtml = '';
+                data.map((item) => {
+                    imghtml+='<img class="inside-img" src=http://localhost/digitalkeval/'+item.img+' />'
+                })
+                $('.sidebar-container').html(imghtml);
+            }
+        })
     })
 
     function c(arg) {
