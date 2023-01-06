@@ -9,12 +9,13 @@
     <title>KV</title>
     <style>
         .sidebar-container {
-            width: 25%;
+            width: 24%;
             float: left;
             height: 100%;
             position: fixed;
             top: 0;
             left: 0;
+            overflow: auto;
             background: #eaeaea;
         }
         .inside-img {
@@ -43,9 +44,7 @@
     <div class="sidebar-container">
     </div>
     <div class="context-container">
-        <form method="post" action="./download.php">
-            <button class="btn btn-primary" type="submit">Download</button>
-        </form>
+        <button class="btn btn-primary" id='download' type="submit">Download</button>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" ></script>
@@ -60,17 +59,31 @@
     })
 
     $(document).ready(() => {
-        console.log('ok')
+        
         $.ajax({
             url: "http://localhost/digitalkeval/listimage.php",
             dataType: 'json',   
             success: (data) => {
                 let imghtml = '';
                 data.map((item) => {
-                    imghtml+='<img class="inside-img" src=http://localhost/digitalkeval/'+item.img+' />'
+                    imghtml+='<img id='+item.id+' class="inside-img" src=http://localhost/digitalkeval/'+item.img+' />'
                 })
                 $('.sidebar-container').html(imghtml);
             }
+        })
+
+        $('#download').click(() => {
+            let selectedIds = '';
+            $('.selected-img').map((index,element) => {
+                selectedIds+=$(element).attr('id')+',';
+            })
+            
+            let url = "http://localhost/digitalkeval/download.php?ids="+selectedIds
+            
+            var link = document.createElement("a")
+            link.href = url
+            link.target = "_blank"
+            link.click()
         })
     })
 
