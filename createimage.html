@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Image </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .container {
+            margin: auto;
+            width: 100%;
+            text-align: center;
+        }
+        .canvas {
+        }
+        .canvas-container {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 75px;
+            background: black;
+        }
+        .input-control {
+            margin-top: 20px;
+        }
+        .item-trey {
+            position: fixed;
+            top: 0;
+            background: white;
+            height: 40px;
+            width: 50%;
+            left: 0;
+            text-align: center;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            align-items: center;
+            box-shadow: 10px 10px 10px #aaaaaa;
+        }
+        .icon-btn {
+            border: 0.5px solid black;
+            border-radius: 5px;
+            padding: 8px;
+            margin: 5px;
+        }
+        .header-container {
+            margin: 10px;
+        }
+        .hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+    </div>
+
+    <div class="container">
+        <canvas id="canvas" class="canvas"></canvas>
+    </div>
+    <div class="container">
+        <input style="display: none;" class="input-control" type="file" id="fileinput" />
+    </div>
+    <div class="item-trey">
+        <div class="container header-container">
+            <span class="icon-btn" id="adtxt"><i class="fa fa-font"></i></span>
+            <span class="icon-btn" id="file-btn"><i class="fa fa-file"></i></span>	
+            <span class="icon-btn hide" id="delete-btn"><i class="fa fa-trash"></i></span>	
+            </span>
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js" integrity="sha512-CeIsOAsgJnmevfCi2C7Zsyy6bQKi43utIjdA87Q0ZY84oDqnI0uwfM9+bKiIkI75lUeI00WG/+uJzOmuHlesMA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://code.jquery.com/jquery-3.6.3.min.js" ></script>
+<script>
+
+    $(document).ready(() => {
+        var canvas = new fabric.Canvas("canvas");
+        canvas.setWidth(550);
+        canvas.setHeight(550);
+
+        $('#adtxt').click(() => {
+            addText();
+        })
+
+        $('#file-btn').click(() => {
+            $('#fileinput').trigger('click');
+        })
+
+        const addText = (info)  => {
+            canvas.add(new fabric.Textbox(info || 'Please Add Info', { 
+                left: 100, 
+                top: 100,
+                width: 300,
+                fill: 'white',
+                editable: true
+            }));
+        }
+
+
+        function addImage(imgLink) {
+            fabric.Image.fromURL(imgLink, function(img) {
+                img.set({ 'left': 250 });
+                img.set({ 'top': 250 });
+                img.scaleToWidth(100);
+                img.scaleToHeight(100);
+                        
+                var objs = canvas.getObjects();
+                // if (objs.length) {
+                //     objs.forEach(function(e) {
+                //         if (e && e.type === 'image') {
+                //             e._element.src = imgLink;
+                //             canvas.renderAll();
+                //         }
+                //     });
+                // } else 
+                canvas.add(img);
+            });
+        }
+
+        // file upload
+        var span = document.querySelector('#fileinput');
+        span.onchange = function(e) {
+            var file = e.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function(file) {
+                addImage(file.target.result);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+</html>
